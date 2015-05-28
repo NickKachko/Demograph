@@ -1,0 +1,8 @@
+D:\KPI\Roma\Demograph\FrontEnd\bin\Debug\FrontEnd.exe.config
+D:\KPI\Roma\Demograph\FrontEnd\bin\Debug\FrontEnd.exe
+D:\KPI\Roma\Demograph\FrontEnd\bin\Debug\FrontEnd.pdb
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.csprojResolveAssemblyReference.cache
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.Properties.Resources.resources
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.csproj.GenerateResource.Cache
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.exe
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.pdb

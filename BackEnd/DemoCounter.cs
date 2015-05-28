@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+//using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,24 +13,73 @@ namespace BackEnd
 {
     class DemoCounter
     {
-        private List<double> f1, f2, f3, x1, x2, x3, x4, x5, x6;
-        private const int numberOfFactors = 6, numberOfCoefficients = 9;
+        private List<double> f1, f2, f3;
+        private const int numberOfFactors = 6, numberOfCoefficients = 9, predictAhead  = 1;
         private List<List<int>> matrixOfChromosomes;
+        private List<List<char>> coefficientMask;
+        private List<List<double>> x;
         private Random rand;
+
+        private double CalculateFitForY(List<int> input,int year, int numberY)
+        {
+            double answer = 0;
+            for (int i = 0; i < numberOfFactors; i++)
+            {
+                answer += (input[i] * x[year][i]) * coefficientMask[numberY][i];
+                answer += (input[numberOfFactors + i] * Math.Pow(x[year][i], 2)) * coefficientMask[numberY][i];
+                answer += (input[2 * numberOfFactors + i] * Math.Pow(Math.E, input[3 * numberOfFactors + i] * x[year][i])) * coefficientMask[numberY][i];
+                answer += (input[4 * numberOfFactors + i] * Math.Pow(x[year][i], input[5 * numberOfFactors + i])) * coefficientMask[numberY][i];
+                answer += (input[6 * numberOfFactors + i] / x[year][i]) * coefficientMask[numberY][i];
+                if (Math.Abs(input[8 * numberOfFactors + i]) >= 1)
+                    answer += (input[7 * numberOfFactors + i] * Math.Log(input[8 * numberOfFactors + i] * x[year][i], Math.E)) * coefficientMask[numberY][i];
+            }
+            return answer;
+        }
+
+        private double CalculateFitness(List<int> input)
+        {
+            double localY1 = 0, localY2 = 0, localY3 = 0;
+            for (int year = 0; year < x.Count - predictAhead; year++)
+            {
+                localY1 += Math.Abs(CalculateFitForY(input, year, 0) - f1[year + predictAhead]) / f1[year + predictAhead];
+                localY2 += Math.Abs(CalculateFitForY(input, year, 1) - f2[year + predictAhead]) / f2[year + predictAhead];
+                localY3 += Math.Abs(CalculateFitForY(input, year, 2) - f3[year + predictAhead]) / f3[year + predictAhead];
+
+            }
+            return double.IsNaN(localY1 + localY2 + localY3)  ? double.MaxValue : (localY1 + localY2 + localY3);
+        }
+
+        private void PerformCrossover()
+        {
+
+        }
 
         public DemoCounter()
         {
             f1 = new List<double>();
             f2 = new List<double>();
             f3 = new List<double>();
-            x1 = new List<double>();
-            x2 = new List<double>();
-            x3 = new List<double>();
-            x4 = new List<double>();
-            x5 = new List<double>();
-            x6 = new List<double>();
             matrixOfChromosomes = new List<List<int>>();
+            x = new List<List<double>>();
             rand = new Random();
+            coefficientMask = new List<List<char>>();
+            for (int j = 0; j<3; j++)
+            {
+                List<char> toInsert = new List<char>();
+                for (int i = 0; i<numberOfFactors; i++)
+                {
+                    toInsert.Add((char)0);
+                }
+                coefficientMask.Add(toInsert);
+            }
+            coefficientMask[0][0] = (char)1;
+            coefficientMask[0][1] = (char)1;
+            coefficientMask[0][3] = (char)1;
+            coefficientMask[0][5] = (char)1;
+            coefficientMask[1][2] = (char)1;
+            coefficientMask[1][4] = (char)1;
+            coefficientMask[2][0] = (char)1;
+            coefficientMask[2][1] = (char)1;
         }
 
         public void ReadDataFromFile(String input)
@@ -42,12 +92,11 @@ namespace BackEnd
                 f1.Add(double.Parse(entries[1]));
                 f2.Add(double.Parse(entries[2]));
                 f3.Add(double.Parse(entries[3]));
-                x1.Add(double.Parse(entries[5]));
-                x2.Add(double.Parse(entries[6]));
-                x3.Add(double.Parse(entries[7]));
-                x4.Add(double.Parse(entries[8]));
-                x5.Add(double.Parse(entries[9]));
-                x6.Add(double.Parse(entries[10]));
+                x.Add(new List<double>());
+                for (int i = 5; i<11; i++)
+                {
+                    x[x.Count-1].Add(double.Parse(entries[i]));
+                }
                 row = streamReader.ReadLine();
             }
         }
@@ -152,6 +201,16 @@ namespace BackEnd
                 toInsert.Add(rand.Next(21) - 10);
             }
             matrixOfChromosomes.Add(toInsert);
+        }
+
+        public void PerformSearch(int numberOfGenerations = 1)
+        {
+            List<double> a1 = new List<double>();
+            List<double> a2 = new List<double>();
+
+            var sorted = matrixOfChromosomes.OrderBy(g => CalculateFitness(g)).ToList();
+            matrixOfChromosomes.ForEach(h => a1.Add(CalculateFitness(h)));
+            sorted.ForEach(h => a2.Add(CalculateFitness(h)));
         }
     }
 }
