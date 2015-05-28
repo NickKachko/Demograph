@@ -12,6 +12,7 @@ namespace BackEnd
         {
             DemoCounter counter = new DemoCounter();
             counter.ReadDataFromFile("data.txt");
+            counter.GenerateChromosomesMatrix();
         }
     }
 }
