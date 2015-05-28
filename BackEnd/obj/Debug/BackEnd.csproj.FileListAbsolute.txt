@@ -1,1 +1,6 @@
 D:\KPI\Roma\Demograph\BackEnd\bin\Debug\BackEnd.exe.config
+D:\KPI\Roma\Demograph\BackEnd\bin\Debug\BackEnd.exe
+D:\KPI\Roma\Demograph\BackEnd\bin\Debug\BackEnd.pdb
+D:\KPI\Roma\Demograph\BackEnd\obj\Debug\BackEnd.csprojResolveAssemblyReference.cache
+D:\KPI\Roma\Demograph\BackEnd\obj\Debug\BackEnd.exe
+D:\KPI\Roma\Demograph\BackEnd\obj\Debug\BackEnd.pdb

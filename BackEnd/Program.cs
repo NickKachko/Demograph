@@ -10,6 +10,8 @@ namespace BackEnd
     {
         static void Main(string[] args)
         {
+            DemoCounter counter = new DemoCounter();
+            counter.ReadDataFromFile("data.txt");
         }
     }
 }
