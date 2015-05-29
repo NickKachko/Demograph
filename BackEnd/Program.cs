@@ -12,8 +12,10 @@ namespace BackEnd
         {
             DemoCounter counter = new DemoCounter();
             counter.ReadDataFromFile("data.txt");
-            counter.GenerateChromosomesMatrix();
-            counter.PerformSearch();
+            counter.GenerateChromosomesMatrix(1000);
+            List<int> output = counter.PerformSearch(100);
+            Console.WriteLine(counter.CalculateFitForY(output, 16, 0) + "\t" + counter.CalculateFitForY(output, 16, 1) + "\t" + counter.CalculateFitForY(output, 16, 2));
+            Console.ReadKey();
         }
     }
 }
