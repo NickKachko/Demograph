@@ -6,3 +6,7 @@ D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.Properties.Resources.resources
 D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.csproj.GenerateResource.Cache
 D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.exe
 D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.pdb
+D:\KPI\Roma\Demograph\FrontEnd\bin\Debug\BackEnd.exe
+D:\KPI\Roma\Demograph\FrontEnd\bin\Debug\BackEnd.pdb
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.Form1.resources
+D:\KPI\Roma\Demograph\FrontEnd\obj\Debug\FrontEnd.Form2.resources

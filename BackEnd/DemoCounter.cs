@@ -5,20 +5,25 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-//using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BackEnd
 {
-    class DemoCounter
+    public class DemoCounter
     {
         private List<double> f1, f2, f3;
+        private List<double> y;
         private const int numberOfFactors = 6, numberOfCoefficients = 9, predictAhead  = 1;
         private List<List<int>> matrixOfChromosomes;
         private List<List<char>> coefficientMask;
         private List<List<double>> x;
         private Random rand;
+        private int mutation;
+        private double error;
+
+        public delegate void StatusUpdateHandler(double progress);
+        public event StatusUpdateHandler OnUpdateStatus;
 
         public double CalculateFitForY(List<int> input,int year, int numberY)
         {
@@ -56,10 +61,33 @@ namespace BackEnd
 
             for (int i = 1; i < matrixOfChromosomes.Count; i++ )
             {
-                output.Add(Crossover(matrixOfChromosomes[0], matrixOfChromosomes[i]));
+                List<int> toAdd = Crossover(matrixOfChromosomes[0], matrixOfChromosomes[i]);
+                if (rand.Next(100) < error-1)
+                {
+                    Mutation(ref toAdd);
+                }
+                output.Add(toAdd);
             }
-
+            moveBestToStart();
             return output;
+        }
+
+        private void moveBestToStart()
+        {
+            double max = CalculateFitness(matrixOfChromosomes[0]), temp;
+            int index = 0;
+            for (int i = 1; i<matrixOfChromosomes.Count; i++)
+            {
+                temp = CalculateFitness(matrixOfChromosomes[i]);
+                if (temp < max)
+                {
+                    index = i;
+                    max = temp;
+                }
+            }
+            List<int> toRelocate = matrixOfChromosomes[index];
+            matrixOfChromosomes.RemoveAt(index);
+            matrixOfChromosomes.Insert(0, toRelocate);
         }
 
         private List<int> Crossover(List<int> a1, List<int> b1)
@@ -89,8 +117,19 @@ namespace BackEnd
             return CalculateFitness(a) < CalculateFitness(b) ? a : b;
         }
 
+        private void Mutation(ref List<int> a)
+        {
+            double multiplier;
+            multiplier = rand.Next(10) + 1;
+            if (rand.Next(2) != 0)
+            {
+                multiplier = multiplier / 10;
+            }
+        }
+
         public DemoCounter()
         {
+            y = new List<double>();
             f1 = new List<double>();
             f2 = new List<double>();
             f3 = new List<double>();
@@ -117,13 +156,41 @@ namespace BackEnd
             coefficientMask[2][1] = (char)1;
         }
 
-        public void ReadDataFromFile(String input)
+        public DemoCounter(List<List<char>> inputMask)
+        {
+            y = new List<double>();
+            f1 = new List<double>();
+            f2 = new List<double>();
+            f3 = new List<double>();
+            matrixOfChromosomes = new List<List<int>>();
+            x = new List<List<double>>();
+            rand = new Random();
+            coefficientMask = inputMask;
+        }
+
+        public void SetMutation(int inputMutation)
+        {
+            mutation = inputMutation;
+        }
+
+        public void SetError(double inputError)
+        {
+            error = inputError;
+        }
+
+        public void SetInputMask(List<List<char>> inputMask)
+        {
+            coefficientMask = inputMask;
+        }
+
+        public void ReadDataFromFile(String input = "data.txt")
         {
             StreamReader streamReader = new StreamReader(input);
             string row = streamReader.ReadLine();
             while (row != null)
             {
                 var entries = row.Split('\t');
+                y.Add(double.Parse(entries[0]));
                 f1.Add(double.Parse(entries[1]));
                 f2.Add(double.Parse(entries[2]));
                 f3.Add(double.Parse(entries[3]));
@@ -244,20 +311,30 @@ namespace BackEnd
         public List<int> PerformSearch(int numberOfGenerations = 1)
         {
             DateTime start = DateTime.Now;
+            moveBestToStart();
             for (int i = 0; i < numberOfGenerations; i++)
             {
-                matrixOfChromosomes = matrixOfChromosomes.OrderBy(g => CalculateFitness(g)).ToList();
+                if (CalculateFitness(matrixOfChromosomes[0])<error)
+                {
+                    break;
+                }
                 matrixOfChromosomes = PerformIteration();
                 DateTime now = DateTime.Now;
                 if (start.AddMilliseconds(500)<now)
                 {
+                    OnUpdateStatus.Invoke(i / (double)numberOfGenerations);
                     start = now;
-                    Console.Clear();
-                    Console.WriteLine(i / (double)numberOfGenerations);
                 }
             }
-            matrixOfChromosomes = matrixOfChromosomes.OrderBy(g => CalculateFitness(g)).ToList();
             return matrixOfChromosomes[0];
+        }
+
+        public void GetYData(out List<double> y, out List<double> y1, out List<double> y2, out List<double> y3)
+        {
+            y = this.y;
+            y1 = f1;
+            y2 = f2;
+            y3 = f3;
         }
     }
 }
