@@ -14,7 +14,7 @@ namespace FrontEnd
     public partial class Form1 : Form
     {
         private List<List<char>> coefficientMask;
-        private const int numberOfFactors = 6, numberOfSpecies = 1000;
+        private const int numberOfFactors = 6, numberOfSpecies = 10000;
         private Form2 form2;
         private DemoCounter counter;
 
@@ -86,6 +86,8 @@ namespace FrontEnd
             counter.GenerateChromosomesMatrix(numberOfSpecies);
             counter.SetMutation((int)numericUpDown4.Value);
             counter.SetError((double)numericUpDown3.Value / 100.0);
+            counter.SetYear((int)numericUpDown1.Value);
+
             form2.SetBestChromosome(counter.PerformSearch((int)numericUpDown2.Value));
             form2.SetPredictAhead((int)numericUpDown1.Value);
             progressBar1.Value = 100;

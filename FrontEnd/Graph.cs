@@ -59,16 +59,20 @@ namespace FrontEnd
             FindMinMax();
             graphics.DrawLine(axisPen, zeroAxis, xAxis);
             graphics.DrawLine(axisPen, zeroAxis, yAxis);
-            graphics.DrawString(xStart.ToString(), font, axisPen.Brush, new PointF(zeroAxis.X, zeroAxis.Y + 5));
-            graphics.DrawString(yEnd.ToString(), font, axisPen.Brush, new PointF(zeroAxis.X - 40, zeroAxis.Y - 10));
-            graphics.DrawString(xEnd.ToString(), font, axisPen.Brush, new PointF(xAxis.X - 10, xAxis.Y + 5));
-            graphics.DrawString(yStart.ToString(), font, axisPen.Brush, new PointF(yAxis.X - 40, yAxis.Y - 0));
+            graphics.DrawString(((int)xStart).ToString(), font, axisPen.Brush, new PointF(zeroAxis.X, zeroAxis.Y + 5));
+            graphics.DrawString(((int)yEnd).ToString(), font, axisPen.Brush, new PointF(zeroAxis.X - 40, zeroAxis.Y - 10));
+            graphics.DrawString(((int)xEnd).ToString(), font, axisPen.Brush, new PointF(xAxis.X - 10, xAxis.Y + 5));
+            graphics.DrawString(((int)yStart).ToString(), font, axisPen.Brush, new PointF(yAxis.X - 40, yAxis.Y - 0));
         }
 
         public void DrawGraph()
         {
             for (int i = 0; i<y.Count - 1; i++)
             {
+                if (i>17)
+                {
+                    graphPen = new Pen(Color.Blue);
+                }
                 Point a, b;
                 a = new Point((int)(zeroAxis.X + i * (xAxis.X - zeroAxis.X) / (double) (y.Count)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i] - yEnd) / (double) (yStart - yEnd)));
                 b = new Point((int)(zeroAxis.X + (i + 1) * (xAxis.X - zeroAxis.X) / (double)(y.Count)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i + 1] - yEnd) / (double)(yStart - yEnd)));

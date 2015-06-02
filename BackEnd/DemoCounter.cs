@@ -14,12 +14,12 @@ namespace BackEnd
     {
         private List<double> f1, f2, f3;
         private List<double> y;
-        private const int numberOfFactors = 6, numberOfCoefficients = 9, predictAhead  = 1;
+        private const int numberOfFactors = 6, numberOfCoefficients = 9;
         private List<List<int>> matrixOfChromosomes;
         private List<List<char>> coefficientMask;
         private List<List<double>> x;
         private Random rand;
-        private int mutation;
+        private int mutation, predictAhead;
         private double error;
 
         public delegate void StatusUpdateHandler(double progress);
@@ -176,6 +176,11 @@ namespace BackEnd
         public void SetError(double inputError)
         {
             error = inputError;
+        }
+
+        public void SetYear(int year)
+        {
+            predictAhead = year;
         }
 
         public void SetInputMask(List<List<char>> inputMask)
