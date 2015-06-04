@@ -336,10 +336,10 @@ namespace BackEnd
 
         public void GetYData(out List<double> y, out List<double> y1, out List<double> y2, out List<double> y3)
         {
-            y = this.y;
-            y1 = f1;
-            y2 = f2;
-            y3 = f3;
+            y = new List<double>(this.y);
+            y1 = new List<double>(f1);
+            y2 = new List<double>(f2);
+            y3 = new List<double>(f3);
         }
     }
 }
