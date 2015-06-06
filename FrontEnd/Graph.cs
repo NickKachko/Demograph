@@ -15,11 +15,13 @@ namespace FrontEnd
         private Size size;
         private Point zeroAxis, xAxis, yAxis;
         private double xStart = 1996, yStart = 0, xEnd, yEnd = 100000;
-        private List<double> y, y1, y2, y3;
+        private int predictAhead = 1;
+        private List<double> y;//, y1, y2, y3;
+        private List<double> yNew;
 
         private void FindMinMax()
         {
-            xEnd = xStart + y.Count;
+            xEnd = xStart + y.Count + predictAhead;
             for (int i = 0; i<y.Count; i++)
             {
                 if (y[i]>yStart)
@@ -29,6 +31,17 @@ namespace FrontEnd
                 if (y[i]<yEnd)
                 {
                     yEnd = y[i];
+                }
+            }
+            for (int i = 0; i < yNew.Count; i++)
+            {
+                if (yNew[i] > yStart)
+                {
+                    yStart = yNew[i];
+                }
+                if (yNew[i] < yEnd)
+                {
+                    yEnd = yNew[i];
                 }
             }
         }
@@ -44,9 +57,24 @@ namespace FrontEnd
             this.size = size;
         }
 
+        public void SetGraphics(ref Graphics input)
+        {
+            graphics = input;
+        }
+
         public void SetY(List<double> y)
         {
-            this.y = y;
+            this.y = new List<double>(y);
+        }
+
+        public void SetNewY(List<double> y)
+        {
+            this.yNew = y;
+        }
+
+        public void SetPredict(int predict)
+        {
+            this.predictAhead = predict;
         }
 
         public void SetPen(Pen toSet)
@@ -69,13 +97,20 @@ namespace FrontEnd
         {
             for (int i = 0; i<y.Count - 1; i++)
             {
-                if (i>17)
-                {
-                    graphPen = new Pen(Color.Blue);
-                }
                 Point a, b;
-                a = new Point((int)(zeroAxis.X + i * (xAxis.X - zeroAxis.X) / (double) (y.Count)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i] - yEnd) / (double) (yStart - yEnd)));
-                b = new Point((int)(zeroAxis.X + (i + 1) * (xAxis.X - zeroAxis.X) / (double)(y.Count)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i + 1] - yEnd) / (double)(yStart - yEnd)));
+                a = new Point((int)(zeroAxis.X + i * (xAxis.X - zeroAxis.X) / (double) (xEnd-xStart)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i] - yEnd) / (double) (yStart - yEnd)));
+                b = new Point((int)(zeroAxis.X + (i + 1) * (xAxis.X - zeroAxis.X) / (double)(xEnd - xStart)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (y[i + 1] - yEnd) / (double)(yStart - yEnd)));
+                graphics.DrawLine(graphPen, a, b);
+                graphics.DrawLine(axisPen, new Point(b.X, zeroAxis.Y - 4), new Point(b.X, zeroAxis.Y + 4));
+                graphics.DrawLine(graphPen, new Point(zeroAxis.X - 4, a.Y), new Point(zeroAxis.X + 4, a.Y));
+            }
+
+            graphPen = new Pen(Color.Blue);
+            for (int i = 0; i < yNew.Count - 1; i++)
+            {
+                Point a, b;
+                a = new Point((int)(zeroAxis.X + (i + predictAhead) * (xAxis.X - zeroAxis.X) / (double)(xEnd - xStart)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (yNew[i] - yEnd) / (double)(yStart - yEnd)));
+                b = new Point((int)(zeroAxis.X + (i + 1 + predictAhead) * (xAxis.X - zeroAxis.X) / (double)(xEnd - xStart)), (int)(zeroAxis.Y - (zeroAxis.Y - yAxis.Y) * (yNew[i + 1] - yEnd) / (double)(yStart - yEnd)));
                 graphics.DrawLine(graphPen, a, b);
                 graphics.DrawLine(axisPen, new Point(b.X, zeroAxis.Y - 4), new Point(b.X, zeroAxis.Y + 4));
                 graphics.DrawLine(graphPen, new Point(zeroAxis.X - 4, a.Y), new Point(zeroAxis.X + 4, a.Y));

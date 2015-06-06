@@ -30,11 +30,11 @@
         {
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Population = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Migration = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Deathrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Birthrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Year = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Birthrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Deathrate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Migration = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Population = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -71,26 +71,12 @@
             this.dataGridView1.Size = new System.Drawing.Size(433, 314);
             this.dataGridView1.TabIndex = 0;
             // 
-            // Population
+            // Year
             // 
-            this.Population.HeaderText = "Population";
-            this.Population.Name = "Population";
-            this.Population.ReadOnly = true;
-            this.Population.Width = 82;
-            // 
-            // Migration
-            // 
-            this.Migration.HeaderText = "Migration";
-            this.Migration.Name = "Migration";
-            this.Migration.ReadOnly = true;
-            this.Migration.Width = 75;
-            // 
-            // Deathrate
-            // 
-            this.Deathrate.HeaderText = "Deathrate";
-            this.Deathrate.Name = "Deathrate";
-            this.Deathrate.ReadOnly = true;
-            this.Deathrate.Width = 79;
+            this.Year.HeaderText = "Year";
+            this.Year.Name = "Year";
+            this.Year.ReadOnly = true;
+            this.Year.Width = 54;
             // 
             // Birthrate
             // 
@@ -99,12 +85,26 @@
             this.Birthrate.ReadOnly = true;
             this.Birthrate.Width = 71;
             // 
-            // Year
+            // Deathrate
             // 
-            this.Year.HeaderText = "Year";
-            this.Year.Name = "Year";
-            this.Year.ReadOnly = true;
-            this.Year.Width = 54;
+            this.Deathrate.HeaderText = "Deathrate";
+            this.Deathrate.Name = "Deathrate";
+            this.Deathrate.ReadOnly = true;
+            this.Deathrate.Width = 79;
+            // 
+            // Migration
+            // 
+            this.Migration.HeaderText = "Migration";
+            this.Migration.Name = "Migration";
+            this.Migration.ReadOnly = true;
+            this.Migration.Width = 75;
+            // 
+            // Population
+            // 
+            this.Population.HeaderText = "Population";
+            this.Population.Name = "Population";
+            this.Population.ReadOnly = true;
+            this.Population.Width = 82;
             // 
             // tabPage1
             // 
@@ -134,6 +134,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(453, 356);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // Form2
             // 

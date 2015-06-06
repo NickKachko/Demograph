@@ -14,7 +14,7 @@ namespace FrontEnd
     public partial class Form1 : Form
     {
         private List<List<char>> coefficientMask;
-        private const int numberOfFactors = 6, numberOfSpecies = 100;
+        private const int numberOfFactors = 6, numberOfSpecies = 10000;
         private Form2 form2;
         private DemoCounter counter;
 
